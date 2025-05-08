@@ -1,4 +1,3 @@
-import csv
 import os
 import json
 
@@ -58,7 +57,7 @@ if __name__ == '__main__':
     listaNombreAreas = [x.replace(' RadGridExport.csv','') for x in os.listdir(folderAreas)]
     listaNombreCatalogos = [x.replace('_RadGridExport.csv','') for x in os.listdir(folderCatalogos)]
     #donde se guardara el json
-    destino='./parte1/diccionario.json'
+    destino='./parte1/datos/json/diccionario.json'
     #se leen los archivos
     lecturaAreas = cargar_csvs(listaAreas)
     lecturaCatalogos = cargar_csvs(listaCatalogos)
