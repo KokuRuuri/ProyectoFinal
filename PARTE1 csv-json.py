@@ -48,8 +48,8 @@ def guardarJson(diccionario,destino):
 
 if __name__ == '__main__':
     #ruta de folders
-    folderAreas = "./parte1/datos/csv/areas"
-    folderCatalogos = "./parte1/datos/csv/catalogos"
+    folderAreas = "./datos/csv/areas"
+    folderCatalogos = "./datos/csv/catalogos"
     #se consigue una lista de rutas de los archivos dentro de los folders
     listaAreas = [folderAreas+'/'+x for x in os.listdir(folderAreas)]
     listaCatalogos = [folderCatalogos+'/'+x for x in os.listdir(folderCatalogos)]
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     listaNombreAreas = [x.replace(' RadGridExport.csv','') for x in os.listdir(folderAreas)]
     listaNombreCatalogos = [x.replace('_RadGridExport.csv','') for x in os.listdir(folderCatalogos)]
     #donde se guardara el json
-    destino='./parte1/datos/json/diccionario.json'
+    destino='./datos/json/diccionario.json'
     #se leen los archivos
     lecturaAreas = cargar_csvs(listaAreas)
     lecturaCatalogos = cargar_csvs(listaCatalogos)
