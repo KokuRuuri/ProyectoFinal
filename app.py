@@ -20,8 +20,9 @@ def area():
 
 @app.route('/area/<nombre_area>')
 def area_detalle(nombre_area):
+    areas = revista_handler.obtener_areas()
     revistas = revista_handler.revistas_por_area(nombre_area)
-    return render_template('area_detalle.html', area=nombre_area, revistas=revistas)
+    return render_template('areas.html', areas=areas, revistas=revistas)
 
 @app.route('/revistas/<area>', methods=['GET'])
 def obtener_revistas_por_area(area):

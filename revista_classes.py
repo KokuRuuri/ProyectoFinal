@@ -4,13 +4,19 @@ import os
 class Revista:
     def __init__(self, titulo, info):
         self.titulo = titulo
-        self.hindex = info.get('hindex', 0)
-        self.areas = info.get('Area EPA', [])
-        self.catalogos = info.get('catalogos', [])
-        self.enlace = info.get('link', '')
-        self.issn = info.get('issn', '').replace('-', '')
-        self.editorial = info.get('editorial', '')
-        self.pais = info.get('pais', '')
+        try:
+            self.hindex=int(info['H_Index'])
+        except:
+            self.hindex=0
+        self.areas = info['Area EPA']
+        self.catalogos = info['Catalogos']
+        self.enlace = info['Sitio web']
+        if info['ISSN']!= None:
+            self.issn = info['ISSN'].replace('-', '')
+        else:
+            self.issn = info['ISSN']
+        self.editorial = info['Publisher']
+        self.widget = info['Widget']
         self.info = info
 
     def to_dict(self):
@@ -21,7 +27,7 @@ class Revista:
         }
 
 class RevistaCatalogo:
-    def __init__(self, path_json='ProyectoFinal/datos/json/datos.json'):
+    def __init__(self, path_json='./datos/json/datos.json'):
         self.path_json = path_json
         self.revistas = {}
         self._cargar_datos()
@@ -31,8 +37,8 @@ class RevistaCatalogo:
             raise FileNotFoundError(f"No se encontró el archivo: {self.path_json}")
         with open(self.path_json, encoding='utf-8') as f:
             data = json.load(f)
-        for titulo, info in data.items():
-            revista = Revista(titulo, info)
+        for titulo in data.keys():
+            revista = Revista(titulo, data[titulo])
             self.revistas[titulo.lower()] = revista
 
     def obtener_revista(self, titulo):

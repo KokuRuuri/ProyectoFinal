@@ -10,7 +10,7 @@
             <h4 class="text-center mb-4">Áreas Disponibles</h4>
             <div class="list-group">
                 {% for area in areas %}
-                <a href="area/{{area}}" class="list-group-item list-group-item-action area-link" data-area="{{ area }}">
+                <a href="/area/{{area}}" class="list-group-item list-group-item-action area-link" data-area="{{ area }}">
                     {{ area.replace('_', ' ') }}
                 </a>
                 {% endfor %}
@@ -29,9 +29,17 @@
                             <th>Título</th>
                             <th style="width: 200px; text-align: center;">H-Index</th>
                         </tr>
+                        {% for revista in revistas %}
+                        <tr>
+                        <th><a href="revista.id" class="list-group-item list-group-item-action area-link" data-area="{{ area }}">
+                        {{ revista.titulo }}</a></th>
+                        
+                        <th>{{revista.hindex}}</th>
+                        </tr>
+                        {% endfor %}
                     </thead>
                     <tbody>
-                        <!-- aquí se cargarán las revistas dinámicamente -->
+                        
                     </tbody>
                 </table>
                 </table>
