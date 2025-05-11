@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Explorar{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3 class="text-center mb-4">Explorar por letra</h3>
+  <p class="text-center">Selecciona una letra para ver las revistas cuyo título inicia con esa letra.</p>
+  <br>
+  <div class="d-flex justify-content-center flex-wrap mb-4">
+    {% for letra in letras %}
+    <a href="{{ url_for('explorar', letra=letra) }}" class="btn btn-outline-primary m-1 {% if letra == letra_actual %}active{% endif %}">
+      {{ letra }}
+    </a>
+    {% endfor %}
+  </div>
+   <!-- Tabla de revistas -->
+  {% if letra and revistas %}
+  <h4 class="mb-3">Revistas que inician con "{{ letra }}"</h4>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th>Título</th>
+          <th>Catálogos</th>
+          <th>Áreas</th>
+          <th>H-Index</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for revista in revistas %}
+        <tr>
+          <td>{{ revista.titulo }}</td>
+          <td>
+            {% for c in revista.catalogos %}
+              <a href="{{ url_for('catalogo_detalle', nombre=c) }}">{{ c }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </td>
+          <td>
+            {% for a in revista.areas %}
+              <a href="{{ url_for('area_detalle', nombre=a) }}">{{ a.replace('_', ' ') }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </td>
+          <td>{{ revista.hindex }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% elif letra %}
+    <p class="text-muted">No se encontraron revistas que inicien con "{{ letra }}"</p>
+  {% endif %}
+</div>
+{% endblock %}

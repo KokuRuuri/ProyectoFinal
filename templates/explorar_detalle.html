@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Revistas con letra "{{ letra }}"{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h4 class="mb-4 text-center">Revistas que inician con "{{ letra }}"</h4>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th>Título</th>
+          <th>Catálogos</th>
+          <th>Áreas</th>
+          <th>H-Index</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for revista in revistas %}
+          <tr>
+            <td><a href="{{ url_for('revista_detalle', id=revista['id']) }}">{{ revista['titulo'] }}</a></td>
+            <td>
+              {% for cat in revista['catalogos'] %}
+                <a href="{{ url_for('catalogo_detalle', nombre=cat) }}">{{ cat }}</a>{% if not loop.last %}, {% endif %}
+              {% endfor %}
+            </td>
+            <td>
+              {% for area in revista['areas'] %}
+                <a href="{{ url_for('area_detalle', nombre=area) }}">{{ area.replace('_', ' ') }}</a>{% if not loop.last %}, {% endif %}
+              {% endfor %}
+            </td>
+            <td class="text-center">{{ revista['hindex'] }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="4" class="text-center">No hay revistas para esta letra.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -51,11 +51,18 @@ def catalogo_detalle(nombre_catalogo):
     )
 
 @app.route('/explorar')
-def explorar():
-    letra = request.args.get('letra', 'A').upper()
-    revistas = revista_handler.revistas_por_letra(letra)
-    letras = [chr(c) for c in range(ord('A'), ord('Z') + 1)]
-    return render_template('explorar.html', revistas=revistas, letra=letra, letras=letras)
+@app.route('/explorar/<letra>')
+def explorar(letra=None):
+    letras = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
+    revistas = []
+    if letra:
+        revistas = revista_handler.revistas_por_letra(letra)
+    return render_template(
+        'explorar.html',
+        letra=letra,
+        letras=letras,
+        revistas=revistas
+    )
 
 @app.route('/busqueda', methods=['GET', 'POST'])
 def busqueda():
