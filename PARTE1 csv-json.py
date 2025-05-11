@@ -1,6 +1,6 @@
 import os
 import json
-
+ 
 def cargar_csvs(lista):
     #carga varios csvs creando una lista de csvs que contiene cada una una lista de palabras
     lecturas = []
@@ -12,17 +12,17 @@ def cargar_csvs(lista):
         #se añade la lista a la lista
         lecturas.append(reader)
     return lecturas
-        
-            
+       
+           
 def creaDiccionario(lecturaAreas,listaNombreAreas,lecturaCatalogos,listaNombreCatalogos):
     #crea diccionario usando las 2 listas de listas
     diccionario={}
-    #contador 
+    #contador
     i=0
     for Areas in lecturaAreas:
         for x in Areas:
             #readlines trae tambien saltos de  lineas asi que se quitan
-            x=x.strip()
+            x=x.replace('"','').strip()
             #se busca si ya existe, si no, se crea uno nuevo, si sí, se añade a la lista de areas el nombre del area
             if x in diccionario.keys():
                 diccionario[x]['areas'].append(listaNombreAreas[i])
@@ -32,7 +32,7 @@ def creaDiccionario(lecturaAreas,listaNombreAreas,lecturaCatalogos,listaNombreCa
     i=0
     for Catalogos in lecturaCatalogos:
         for x in Catalogos:
-            x=x.strip()
+            x=x.replace('"','').strip()
             if x in diccionario.keys():
                 diccionario[x]['catalogos'].append(listaNombreCatalogos[i])
             else:
@@ -40,12 +40,12 @@ def creaDiccionario(lecturaAreas,listaNombreAreas,lecturaCatalogos,listaNombreCa
         i+=1
     diccionario.pop("TITULO:")
     return diccionario
-
+ 
 def guardarJson(diccionario,destino):
     #guarda el diccionario en json
-    with open(destino, 'w') as f:
-        json.dump(diccionario,f,indent = 4)
-
+    with open(destino,'w',encoding='latin-1') as f:
+        json.dump(diccionario,f,indent = 4,ensure_ascii=False)
+ 
 if __name__ == '__main__':
     #ruta de folders
     folderAreas = "./datos/csv/areas"
