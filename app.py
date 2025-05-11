@@ -58,7 +58,7 @@ def explorar(letra=None):
     if letra:
         revistas = revista_handler.revistas_por_letra(letra)
     return render_template(
-        'explorar.html',
+        'explorar_detalle.html',
         letra=letra,
         letras=letras,
         revistas=revistas
@@ -72,6 +72,15 @@ def busqueda():
         termino = request.form.get('termino', '')
         resultados = revista_handler.buscar_revistas(termino)
     return render_template('busqueda.html', resultados=resultados, termino=termino)
+
+@app.route('/revista/<id>')
+def revista_detalle(id):
+    # Buscar revista por ISSN sin guiones (como ID)
+    revista = next((rev for rev in revista_handler.obtener_todas_revistas() if rev.issn == id), None)
+    if revista:
+        return render_template('revista_detalle.html', revista=revista)
+    else:
+        return f"Revista con id {id} no encontrada", 404
 
 @app.route('/creditos')
 def creditos():

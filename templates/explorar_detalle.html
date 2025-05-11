@@ -3,6 +3,18 @@
 {% block title %}Revistas con letra "{{ letra }}"{% endblock %}
 
 {% block content %}
+<div class="container mt-4">
+  <h3 class="text-center mb-4">Explorar por letra</h3>
+  <p class="text-center">Selecciona una letra para ver las revistas cuyo título inicia con esa letra.</p>
+  <br>
+  <div class="d-flex justify-content-center flex-wrap mb-4">
+    {% for letra in letras %}
+    <a href="{{ url_for('explorar', letra=letra) }}" class="btn btn-outline-primary m-1 {% if letra == letra_actual %}active{% endif %}">
+      {{ letra }}
+    </a>
+    {% endfor %}
+  </div>
+</div>
 <div class="container mt-5">
   <h4 class="mb-4 text-center">Revistas que inician con "{{ letra }}"</h4>
 
@@ -19,18 +31,18 @@
       <tbody>
         {% for revista in revistas %}
           <tr>
-            <td><a href="{{ url_for('revista_detalle', id=revista['id']) }}">{{ revista['titulo'] }}</a></td>
+            <td style="width: 500px;"><a href="{{ url_for('revista_detalle', id=revista['id']) }}">{{ revista['titulo'] }}</a></td>
             <td>
               {% for cat in revista['catalogos'] %}
-                <a href="{{ url_for('catalogo_detalle', nombre=cat) }}">{{ cat }}</a>{% if not loop.last %}, {% endif %}
+                <a href="{{ url_for('catalogo_detalle', nombre_catalogo=cat) }}">{{ cat }}</a>{% if not loop.last %}, {% endif %}
               {% endfor %}
             </td>
-            <td>
+            <td style="width: 300px;">
               {% for area in revista['areas'] %}
-                <a href="{{ url_for('area_detalle', nombre=area) }}">{{ area.replace('_', ' ') }}</a>{% if not loop.last %}, {% endif %}
+                <a href="{{ url_for('area_detalle', nombre_area=area) }}">{{ area.replace('_', ' ') }}</a>{% if not loop.last %}, {% endif %}
               {% endfor %}
             </td>
-            <td class="text-center">{{ revista['hindex'] }}</td>
+            <td class="text-center" >{{ revista['hindex'] }}</td>
           </tr>
         {% else %}
           <tr>
