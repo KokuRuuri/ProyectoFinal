@@ -1,92 +1,57 @@
 :root {
-    --unison-blue: #003366;
-    --unison-yellow: #FFCC00;
-    --unison-light: #f8f9fa;
+  --unison-azul: #003366;
+  --unison-dorado: #f4b400;
 }
 
-/* Colores institucionales */
-.bg-unison {
-    background-color: var(--unison-blue) !important;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
 }
 
-.bg-yellow {
-    background-color: var(--unison-yellow) !important;
-}
-
-.text-unison {
-    color: var(--unison-blue) !important;
-}
-
-.text-yellow {
-    color: var(--unison-yellow) !important;
+h1, h2, h3 {
+  color: var(--unison-azul);
 }
 
 .btn-unison {
-    background-color: var(--unison-blue);
-    color: white;
-    border-color: var(--unison-blue);
+  background-color: var(--unison-azul);
+  color: white;
+  border: none;
 }
 
 .btn-unison:hover {
-    background-color: #002244;
-    border-color: #002244;
-    color: white;
+  background-color: #002244;
 }
 
-.btn-yellow {
-    background-color: var(--unison-yellow);
-    color: var(--unison-blue);
-    border-color: var(--unison-yellow);
+.navbar-brand, .nav-link {
+  font-weight: 500;
 }
 
-.btn-yellow:hover {
-    background-color: #e6b800;
-    border-color: #e6b800;
-    color: var(--unison-blue);
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+  color: white;
 }
 
-/* Navbar personalizada */
-.navbar {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+.navbar-dark .nav-link:hover {
+  color: var(--unison-dorado);
 }
 
-/* Tarjetas con sombra */
-.card {
-    transition: transform 0.2s;
-    border: none;
-    border-radius: 0.5rem;
+a {
+  color: var(--unison-azul);
+  text-decoration: none;
 }
 
-.card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+a:hover {
+  text-decoration: underline;
 }
 
-/* Badges personalizados */
-.badge-unison {
-    background-color: var(--unison-blue);
-    color: white;
+.bg-white {
+  background-color: white !important;
 }
 
-/* Estilos para tablas */
-.table thead {
-    background-color: var(--unison-blue);
-    color: white;
+.shadow-sm {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
-/* Pie de página */
-footer a {
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
-/* Responsividad adicional */
-@media (max-width: 768px) {
-    .navbar-brand span {
-        display: none;
-    }
+footer small {
+  color: #6c757d;
 }
