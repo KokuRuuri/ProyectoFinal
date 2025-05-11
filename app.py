@@ -22,7 +22,12 @@ def area():
 def area_detalle(nombre_area):
     areas = revista_handler.obtener_areas()
     revistas = revista_handler.revistas_por_area(nombre_area)
-    return render_template('areas.html', areas=areas, revistas=revistas)
+    return render_template(
+        'area_detalle.html',
+        areas=areas,
+        revistas=revistas,
+        area_actual=nombre_area
+    )
 
 @app.route('/revistas/<area>', methods=['GET'])
 def obtener_revistas_por_area(area):
@@ -32,12 +37,18 @@ def obtener_revistas_por_area(area):
 @app.route('/catalogos')
 def catalogos():
     catalogos = revista_handler.obtener_catalogos()
-    return render_template('catalogos.html', catalogos=catalogos)
+    return render_template('catalogo.html', catalogos=catalogos)
 
 @app.route('/catalogos/<nombre_catalogo>')
 def catalogo_detalle(nombre_catalogo):
     revistas = revista_handler.revistas_por_catalogo(nombre_catalogo)
-    return render_template('catalogo_detalle.html', catalogo=nombre_catalogo, revistas=revistas)
+    catalogos = revista_handler.obtener_catalogos()
+    return render_template(
+        'catalogo_detalle.html',
+        catalogo=nombre_catalogo,
+        revistas=revistas,
+        catalogos=catalogos
+    )
 
 @app.route('/explorar')
 def explorar():
