@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 import json
-import os
+import revista_classes as rc
 
 app = Flask(__name__)
 
@@ -22,7 +22,7 @@ def catalogos():
 
 @app.route('/explorar')
 def explorar():
-    with open('datos/json/diccionario.json', encoding='utf-8') as f:
+    with open('./datos/json/diccionario.json', encoding='utf-8') as f:
         data = json.load(f)
     return render_template('explorar.html', data=data)
 
@@ -38,7 +38,7 @@ def busqueda():
 
 @app.route('/revista/<titulo>')
 def revista(titulo):
-    with open('datos/json/diccionariojson', encoding='utf-8') as f:
+    with open('datos/json/diccionario.json', encoding='utf-8') as f:
         data = json.load(f)
     info = data.get(titulo.lower())
     return render_template('revista.html', titulo=titulo, info=info)
