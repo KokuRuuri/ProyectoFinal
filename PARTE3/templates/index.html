@@ -1,18 +1,50 @@
 {% extends 'base.html' %}
 
-{% block title %}Inicio - UniDocs{% endblock %}
+{% block title %}Inicio{% endblock %}
 
 {% block content %}
-<div class="p-4 bg-white rounded shadow-sm">
-  <h1 class="text-primary">Bienvenido a UniDocs</h1>
-  <p class="lead">
-    Este sitio permite explorar revistas académicas de distintas áreas del conocimiento, categorizadas según su presencia en catálogos reconocidos como JCR y SCOPUS.
-  </p>
-  <p>
-    Puedes buscar revistas por título, área, catálogo o explorar alfabéticamente. La información es extraída y actualizada desde <strong>SCImago Journal Rank</strong>.
-  </p>
-  <p>
-    Desarrollado como proyecto final para la materia de Programación Web en la Universidad de Sonora.
-  </p>
+<div class="container mt-5">
+  <div class="text-center">
+    <h1 class="display-4">Bienvenido a UniDocs:</h1>
+    <h3>El explorador universitario de revistas</h3>
+    <br>
+    <p class="lead">Consulta y explora revistas académicas clasificadas por área, catálogo o por nombre.</p>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title" style="color: #004990;">Explorar por Área</h5>
+          <p class="card-text">Descubre las revistas organizadas según su área temática.</p>
+          <a href="{{ url_for('area') }}" class="btn btn-primary">Ver Áreas</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mt-4 mt-md-0">
+      <div class="card shadow-sm h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title" style="color: #004990;">Catálogos</h5>
+          <p class="card-text">Filtra las revistas por su presencia en catálogos reconocidos como JCR o SCOPUS.</p>
+          <a href="{{ url_for('catalogos') }}" class="btn" style="background-color: #F7A11B; color: white; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">Ver Catálogos</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mt-4 mt-md-0">
+      <div class="card shadow-sm h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title" style="color: #004990;">Navegar por Letra</h5>
+          <p class="card-text">Encuentre toda la informacion relacionada con las revistas por la inicial de su nombre.</p>
+          <a href="{{ url_for('explorar') }}" class="btn btn-primary">Explorar</a> 
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-5">
+    <p class="text-muted">Total de revistas disponibles: <strong>{{ total }}</strong></p>
+  </div>
 </div>
 {% endblock %}

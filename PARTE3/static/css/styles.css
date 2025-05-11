@@ -1,57 +1,76 @@
-:root {
-  --unison-azul: #003366;
-  --unison-dorado: #f4b400;
-}
+  :root {
+    --unison-azul: #003366;
+    --unison-dorado: #f4b400;
+  }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f8f9fa;
-}
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+  }
 
-h1, h2, h3 {
-  color: var(--unison-azul);
-}
+  h1, h2, h3 {
+    color: var(--unison-azul);
+  }
 
-.btn-unison {
-  background-color: var(--unison-azul);
-  color: white;
-  border: none;
-}
+  .btn-unison {
+    background-color: var(--unison-azul);
+    color: white;
+    border: none;
+  }
 
-.btn-unison:hover {
-  background-color: #002244;
-}
+  .btn-unison:hover {
+    background-color: #002244;
+  }
 
-.navbar-brand, .nav-link {
-  font-weight: 500;
-}
+  .navbar-brand, .nav-link {
+    font-weight: 500;
+  }
 
-.navbar-dark .navbar-brand,
-.navbar-dark .nav-link {
-  color: white;
-}
+  .navbar-dark .navbar-brand,
+  .navbar-dark .nav-link {
+    color: white;
+  }
 
-.navbar-dark .nav-link:hover {
-  color: var(--unison-dorado);
-}
+  .navbar-dark .nav-link:hover {
+    color: var(--unison-dorado);
+  }
 
-a {
-  color: var(--unison-azul);
-  text-decoration: none;
-}
+  a {
+    color: var(--unison-azul);
+    text-decoration: none;
+  }
 
-a:hover {
-  text-decoration: underline;
-}
 
-.bg-white {
-  background-color: white !important;
-}
+  .bg-white {
+    background-color: white !important;
+  }
 
-.shadow-sm {
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-}
+  .shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
 
-footer small {
-  color: #6c757d;
-}
+  footer small {
+    color: #6c757d;
+  }
+
+  .navbar-primary {
+    background-color: #004990;
+  }
+  .navbar-secondary {
+    background-color: #ffffff;
+    border-bottom: 2px solid #f7a11b;
+  }
+  .navbar-secondary .nav-link {
+    color: #004990;
+    font-weight: 500;
+    position: relative;
+  }
+  .navbar-secondary .nav-link:hover::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #f7a11b;
+    bottom: 0;
+    left: 0;
+  }
