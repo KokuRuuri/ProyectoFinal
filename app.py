@@ -1,47 +1,59 @@
-from flask import Flask, render_template, request
-import json
-import revista_classes as rc
+from flask import Flask, render_template, request, jsonify
+from revista_classes import RevistaCatalogo
 
 app = Flask(__name__)
+revista_handler = RevistaCatalogo()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    revistas = sorted(
+        revista_handler.obtener_todas_revistas(),
+        key=lambda r: r.hindex,
+        reverse=True
+    )
+    return render_template('index.html', revistas=revistas)
 
 @app.route('/area')
 def area():
-    with open('datos/json/diccionario.json', encoding='utf-8') as f:
-        data = json.load(f)
-    return render_template('area.html', data=data)
+    areas = revista_handler.obtener_areas()
+    return render_template('area.html', areas=areas)
+
+@app.route('/area/<nombre_area>')
+def area_detalle(nombre_area):
+    revistas = revista_handler.revistas_por_area(nombre_area)
+    return render_template('area_detalle.html', area=nombre_area, revistas=revistas)
+
+@app.route('/revistas/<area>', methods=['GET'])
+def obtener_revistas_por_area(area):
+    revistas = revista_handler.revistas_por_area(area)
+    revistas_dict = [revista.to_dict() for revista in revistas]
+    return jsonify({'revistas': revistas_dict})
 
 @app.route('/catalogos')
 def catalogos():
-    with open('datos/json/diccionario.json', encoding='utf-8') as f:
-        data = json.load(f)
-    return render_template('catalogos.html', data=data)
+    catalogos = revista_handler.obtener_catalogos()
+    return render_template('catalogos.html', catalogos=catalogos)
+
+@app.route('/catalogos/<nombre_catalogo>')
+def catalogo_detalle(nombre_catalogo):
+    revistas = revista_handler.revistas_por_catalogo(nombre_catalogo)
+    return render_template('catalogo_detalle.html', catalogo=nombre_catalogo, revistas=revistas)
 
 @app.route('/explorar')
 def explorar():
-    with open('./datos/json/diccionario.json', encoding='utf-8') as f:
-        data = json.load(f)
-    return render_template('explorar.html', data=data)
+    letra = request.args.get('letra', 'A').upper()
+    revistas = revista_handler.revistas_por_letra(letra)
+    letras = [chr(c) for c in range(ord('A'), ord('Z') + 1)]
+    return render_template('explorar.html', revistas=revistas, letra=letra, letras=letras)
 
 @app.route('/busqueda', methods=['GET', 'POST'])
 def busqueda():
     resultados = []
+    termino = ''
     if request.method == 'POST':
-        termino = request.form['termino'].lower()
-        with open('datos/json/diccionario.json', encoding='utf-8') as f:
-            data = json.load(f)
-        resultados = [rev for rev in data if termino in rev.lower()]
-    return render_template('busqueda.html', resultados=resultados)
-
-@app.route('/revista/<titulo>')
-def revista(titulo):
-    with open('datos/json/diccionario.json', encoding='utf-8') as f:
-        data = json.load(f)
-    info = data.get(titulo.lower())
-    return render_template('revista.html', titulo=titulo, info=info)
+        termino = request.form.get('termino', '')
+        resultados = revista_handler.buscar_revistas(termino)
+    return render_template('busqueda.html', resultados=resultados, termino=termino)
 
 @app.route('/creditos')
 def creditos():
