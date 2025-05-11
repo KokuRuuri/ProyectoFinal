@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Créditos{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <h2 class="text-center mb-4 text-secondary">Créditos del Proyecto</h2>
+
+            <!-- Developer Section -->
+            <div class="bg-light p-4 rounded shadow-sm">
+                <h4 class="text-center mb-4 text-primary">Equipo de Desarrollo</h4>
+                <div class="row">
+                    <!-- Developer 1 -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-light">
+                            <div class="card-body text-center">
+                                <img src="https://avatars.githubusercontent.com/u/157997372?v=4" alt="Foto Cami" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                                <h5 class="card-title text-primary">Camila Martinez Valenzuela</h5>
+                                <p class="card-text text-muted">Desarrollador de la Parte 3</p>
+                                <p class="text-muted"><em>Frontend, Diseño y Navegación</em></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Developer 2 -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-light">
+                            <div class="card-body text-center">
+                                <img src="https://avatars.githubusercontent.com/u/158304978?v=4" alt="Foto Miri" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                                <h5 class="card-title text-primary">Miriam Carolina Ruiz Figueroa</h5>
+                                <p class="card-text text-muted">Desarrollador de la Parte 1 y 2</p>
+                                <p class="text-muted"><em>Backend y Funcionalidades</em></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-5">
+                <p class="text-muted">&copy; 2025 Universidad de Sonora - Proyecto UniDocs</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
