@@ -1,0 +1,92 @@
+:root {
+    --unison-blue: #003366;
+    --unison-yellow: #FFCC00;
+    --unison-light: #f8f9fa;
+}
+
+/* Colores institucionales */
+.bg-unison {
+    background-color: var(--unison-blue) !important;
+}
+
+.bg-yellow {
+    background-color: var(--unison-yellow) !important;
+}
+
+.text-unison {
+    color: var(--unison-blue) !important;
+}
+
+.text-yellow {
+    color: var(--unison-yellow) !important;
+}
+
+.btn-unison {
+    background-color: var(--unison-blue);
+    color: white;
+    border-color: var(--unison-blue);
+}
+
+.btn-unison:hover {
+    background-color: #002244;
+    border-color: #002244;
+    color: white;
+}
+
+.btn-yellow {
+    background-color: var(--unison-yellow);
+    color: var(--unison-blue);
+    border-color: var(--unison-yellow);
+}
+
+.btn-yellow:hover {
+    background-color: #e6b800;
+    border-color: #e6b800;
+    color: var(--unison-blue);
+}
+
+/* Navbar personalizada */
+.navbar {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+/* Tarjetas con sombra */
+.card {
+    transition: transform 0.2s;
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Badges personalizados */
+.badge-unison {
+    background-color: var(--unison-blue);
+    color: white;
+}
+
+/* Estilos para tablas */
+.table thead {
+    background-color: var(--unison-blue);
+    color: white;
+}
+
+/* Pie de página */
+footer a {
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsividad adicional */
+@media (max-width: 768px) {
+    .navbar-brand span {
+        display: none;
+    }
+}
