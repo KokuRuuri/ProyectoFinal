@@ -26,8 +26,7 @@ def area_detalle(nombre_area):
 @app.route('/revistas/<area>', methods=['GET'])
 def obtener_revistas_por_area(area):
     revistas = revista_handler.revistas_por_area(area)
-    revistas_dict = [revista.to_dict() for revista in revistas]
-    return jsonify({'revistas': revistas_dict})
+    return jsonify({'revistas': [revista.to_dict() for revista in revistas]})
 
 @app.route('/catalogos')
 def catalogos():

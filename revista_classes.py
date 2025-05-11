@@ -54,8 +54,9 @@ class RevistaCatalogo:
         return sorted(catalogos)
 
     def revistas_por_area(self, area):
+        area = area.lower()
         return sorted(
-            [rev for rev in self.revistas.values() if area in rev.areas],
+            [rev for rev in self.revistas.values() if area in [a.lower() for a in rev.areas]],
             key=lambda r: r.hindex,
             reverse=True
         )
