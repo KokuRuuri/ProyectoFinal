@@ -12,6 +12,18 @@ app = Flask(__name__)
 revista_handler = RevistaCatalogo()
 app.secret_key = os.urandom(24)
  
+@app.route('/area/')
+def area():
+    nombre_area='CIENCIAS_BIO'
+    areas = revista_handler.obtener_areas()
+    revistas = revista_handler.revistas_por_area(nombre_area)
+    return render_template(
+        'area_detalle.html',
+        areas=areas,
+        revistas=revistas,
+        area_actual=nombre_area
+    )
+
 @app.route('/')
 def index():
     revistas = sorted(
@@ -22,22 +34,24 @@ def index():
     total = len(revistas)  # calcular total de revistas
     return render_template('index.html', revistas=revistas, total=total)
  
-@app.route('/area')
-def area():
-    areas = revista_handler.obtener_areas()
-    return render_template('area.html', areas=areas)
- 
-@app.route('/area/<nombre_area>')
+
+@app.route('/area/<nombre_area>', methods=['GET', 'POST'])
 def area_detalle(nombre_area):
     areas = revista_handler.obtener_areas()
     revistas = revista_handler.revistas_por_area(nombre_area)
+    resultados = []
+    termino = ''
+    if request.method == 'POST':
+        termino = request.form.get('termino', '')
+        resultados = revista_handler.buscar_revistas(termino)
+        revistas = [rev for rev in resultados if rev in revistas]
     return render_template(
         'area_detalle.html',
         areas=areas,
         revistas=revistas,
         area_actual=nombre_area
     )
- 
+    
 @app.route('/buscar_revistas')
 def buscar_revistas():
     q = request.args.get('q', '').lower()
@@ -73,10 +87,14 @@ def catalogos():
     catalogos = revista_handler.obtener_catalogos()
     return render_template('catalogo.html', catalogos=catalogos)
  
-@app.route('/catalogos/<nombre_catalogo>')
+@app.route('/catalogos/<nombre_catalogo>',methods=['GET', 'POST'])
 def catalogo_detalle(nombre_catalogo):
     revistas = revista_handler.revistas_por_catalogo(nombre_catalogo)
     catalogos = revista_handler.obtener_catalogos()
+    if request.method == 'POST':
+        termino = request.form.get('termino', '')
+        resultados = revista_handler.buscar_revistas(termino)
+        revistas = [rev for rev in resultados if rev in revistas]
     return render_template(
         'catalogo_detalle.html',
         catalogo=nombre_catalogo,
