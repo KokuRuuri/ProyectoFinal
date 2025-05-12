@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Búsqueda de Revistas{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3 class="text-center mb-4">Buscar Revistas</h3>
+
+  <form method="POST" class="mb-4">
+    <div class="input-group">
+      <input type="text" name="termino" class="form-control" placeholder="Ingrese palabras clave..." value="{{ termino }}">
+      <button class="btn btn-primary" type="submit">Buscar</button>
+    </div>
+  </form>
+
+  {% if termino %}
+    <h5 class="text-center mb-3">Resultados para: "<strong>{{ termino }}</strong>"</h5>
+    {% if resultados %}
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th style="width: 500px;">Título</th>
+              <th>Catálogos</th>
+              <th style="width: 300px;">Áreas</th>
+              <th style="width: 150px; text-align: center;">H-Index</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for revista in resultados %}
+              <tr>
+                <td><a href="/revista/{{ revista.id }}">{{ revista.titulo }}</a></td>
+                <td>
+                  {% for cat in revista.catalogos %}
+                    <a href="{{ url_for('catalogo_detalle', nombre_catalogo=cat) }}">{{ cat }}</a>{% if not loop.last %}, {% endif %}
+                  {% endfor %}
+                </td>
+                <td>
+                  {% for area in revista.areas %}
+                    <a href="{{ url_for('area_detalle', nombre_area=area) }}">{{ area.replace('_', ' ') }}</a>{% if not loop.last %}, {% endif %}
+                  {% endfor %}
+                </td>
+                <td class="text-center">{{ revista.hindex }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-muted text-center">No se encontraron resultados.</p>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('search-filter');
+    const rows = document.querySelectorAll('#resultados-table tbody tr');
+
+    if (searchInput && rows.length) {
+      searchInput.addEventListener('input', () => {
+        const term = searchInput.value.toLowerCase();
+        rows.forEach(row => {
+          const texto = row.textContent.toLowerCase();
+          row.style.display = texto.includes(term) ? '' : 'none';
+        });
+      });
+    }
+  });
+</script>
+{% endblock %}
