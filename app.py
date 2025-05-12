@@ -3,13 +3,15 @@ from revista_classes import RevistaCatalogo
 from scripts import web_scrapper as wb
 import os
 import hashlib
+import datetime
 
-
+json_locacion = './datos/json/datos.json'
+json = wb.cargarJSONutf8(json_locacion)
 users = wb.cargarJSONutf8('./datos/json/users.json')
 app = Flask(__name__)
 revista_handler = RevistaCatalogo()
 app.secret_key = os.urandom(24)
-
+ 
 @app.route('/')
 def index():
     revistas = sorted(
@@ -19,12 +21,12 @@ def index():
     )
     total = len(revistas)  # calcular total de revistas
     return render_template('index.html', revistas=revistas, total=total)
-
+ 
 @app.route('/area')
 def area():
     areas = revista_handler.obtener_areas()
     return render_template('area.html', areas=areas)
-
+ 
 @app.route('/area/<nombre_area>')
 def area_detalle(nombre_area):
     areas = revista_handler.obtener_areas()
@@ -35,7 +37,7 @@ def area_detalle(nombre_area):
         revistas=revistas,
         area_actual=nombre_area
     )
-
+ 
 @app.route('/buscar_revistas')
 def buscar_revistas():
     q = request.args.get('q', '').lower()
@@ -47,7 +49,7 @@ def buscar_revistas():
         filtradas = revista_handler.revistas_por_catalogo(catalogo)
     else:
         filtradas = revista_handler.obtener_todas_revistas()
-
+ 
     # Búsqueda por término
     resultado = [
         {
@@ -57,20 +59,20 @@ def buscar_revistas():
         }
         for r in filtradas if q in r['titulo'].lower()
     ]
-
+ 
     return jsonify({'revistas': resultado})
-
-
+ 
+ 
 @app.route('/revistas/<area>', methods=['GET'])
 def obtener_revistas_por_area(area):
     revistas = revista_handler.revistas_por_area(area)
     return jsonify({'revistas': [revista.to_dict() for revista in revistas]})
-
+ 
 @app.route('/catalogos')
 def catalogos():
     catalogos = revista_handler.obtener_catalogos()
     return render_template('catalogo.html', catalogos=catalogos)
-
+ 
 @app.route('/catalogos/<nombre_catalogo>')
 def catalogo_detalle(nombre_catalogo):
     revistas = revista_handler.revistas_por_catalogo(nombre_catalogo)
@@ -81,11 +83,7 @@ def catalogo_detalle(nombre_catalogo):
         revistas=revistas,
         catalogos=catalogos
     )
-
-@app.route("/login")
-def login():
-    return render_template("login.html")
-
+ 
 @app.route('/explorar')
 @app.route('/explorar/<letra>')
 def explorar(letra=None):
@@ -99,7 +97,7 @@ def explorar(letra=None):
         letras=letras,
         revistas=revistas
     )
-
+ 
 @app.route('/busqueda', methods=['GET', 'POST'])
 def busqueda():
     resultados = []
@@ -108,16 +106,24 @@ def busqueda():
         termino = request.form.get('termino', '')
         resultados = revista_handler.buscar_revistas(termino)
     return render_template('busqueda.html', resultados=resultados, termino=termino)
-
+ 
 @app.route('/revista/<id>')
 def revista_detalle(id):
     # Buscar revista por ISSN sin guiones (como ID)
     revista = next((rev for rev in revista_handler.obtener_todas_revistas() if rev.issn == id), None)
+    dia=datetime.date.today().day
+    mes=datetime.date.today().month
+    dia_anio=(mes*30)+dia
+    dia_anio_rev=(revista.mes*30)+revista.dia
+    if dia_anio-dia_anio_rev>30 or dia_anio-dia_anio_rev<-30 :
+        json.update(wb.ConseguirInformacion(revista.titulo,revista.areas,revista.catalogos))
+        wb.guardarJSON(json,json_locacion)
+        revista_handler = RevistaCatalogo()
     if revista:
         return render_template('revista_detalle.html', revista=revista)
     else:
         return f"Revista con id {id} no encontrada", 404
-
+ 
 @app.route('/creditos')
 def creditos():
     return render_template('creditos.html')
@@ -132,11 +138,8 @@ def login():
                 session['logged_in'] = True
                 session['username'] = username
                 return redirect(url_for('index'))
-            else:
-                error = 'Usuario o contraseña incorrectos'
-        else:
-            error = 'Usuario o contraseña incorrectos'
     return render_template('login.html')
+ 
 
 if __name__ == '__main__':
     app.run(debug=True)

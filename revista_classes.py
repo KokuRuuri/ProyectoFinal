@@ -11,12 +11,17 @@ class Revista:
         self.areas = info['Area EPA']
         self.catalogos = info['Catalogos']
         self.enlace = info['Sitio web']
-        if info['ISSN'] != None:
-            self.issn = info['ISSN'].replace('-', '')
+        if info['ISSN'] is not None:
+            if isinstance(info['ISSN'], list):
+                self.issn = info['ISSN'][0].replace('-', '')
+            else:
+                self.issn = info['ISSN'].replace('-', '')
         else:
             self.issn = info['ISSN']
         self.editorial = info['Publisher']
         self.widget = info['Widget']
+        self.mes =info['ultima_visita'][0]
+        self.dia =info['ultima_visita'][1]
         self.info = info
 
     def to_dict(self):
