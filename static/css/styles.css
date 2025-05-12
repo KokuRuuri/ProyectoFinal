@@ -1,0 +1,78 @@
+:root {
+    --unison-azul: #003366;
+    --unison-dorado: #f4b400;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+h1, h2, h3 {
+    color: var(--unison-azul);
+}
+
+.btn-unison {
+    background-color: var(--unison-azul);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-unison:hover {
+    background-color: #002244;
+}
+
+.navbar-primary {
+    background-color: #004990;
+}
+
+.navbar-secondary {
+    background-color: #ffffff;
+    border-bottom: 2px solid #f7a11b;
+}
+
+.navbar-secondary .nav-link {
+    color: #004990;
+}
+
+.navbar-secondary .nav-link:hover {
+    color: var(--unison-dorado);
+}
+
+/* Estilo para las tarjetas */
+.unison-card {
+    background-color: #f5f5f5;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+}
+
+.unison-card:hover {
+    background-color: #e9ecef;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    color: var(--unison-azul);
+    text-transform: uppercase;
+}
+
+/* Estilos para las filas de áreas */
+.row-cols-1, .row-cols-sm-2, .row-cols-md-3, .row-cols-lg-4 {
+    margin-top: 20px;
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 767px) {
+    .row-cols-md-3 {
+        row-gap: 1.5rem;
+    }
+}

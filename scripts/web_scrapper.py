@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import concurrent.futures
 import Levenshtein
-
+import datetime
 
 url_ISSN='https://portal.issn.org/api/search?search[]=MUST='
 url_busqueda='https://www.scimagojr.com/journalsearch.php?q='
@@ -82,7 +82,8 @@ def ConseguirInformacion(titulo,areas,catalogos):
         'Publisher': None,
         'ISSN':None,
         'Widget':None,
-        'Publication Type': None}
+        'Publication Type': None,
+        'ultima_visita':[datetime.date.today().month,datetime.date.today().day]}
     '''si consigue el ISSN (main content)'''
     if main_content:
         '''si NO fue archivo corrupto.
@@ -118,9 +119,9 @@ def ConseguirInformacion(titulo,areas,catalogos):
                         Sitio = ''
                     dict[ntitulo]['Sitio web']=Sitio
                     if len(divs[3].findAll('p'))==2:
-                        dict[ntitulo]['H_index']=divs[3].findAll('p')[1].text
+                        dict[ntitulo]['H_Index']=divs[3].findAll('p')[1].text
                     else:
-                        dict[ntitulo]['H_index']=divs[3].findAll('p')[0].text
+                        dict[ntitulo]['H_Index']=divs[3].findAll('p')[0].text
                     '''aqui consigue las areas y sus categorias en forma de diccionario'''
                     dict[ntitulo]['Subject Area and category'] ={ul.find('li').a.text:[li.a.text for li in ul.find('li').ul.findAll('li',recursive=False)] for ul in divs[1].p.findAll('ul',recursive=False)}
                     dict[ntitulo]['Publisher']=divs[2].find('p').text.strip()
@@ -128,7 +129,6 @@ def ConseguirInformacion(titulo,areas,catalogos):
                     dict[ntitulo]['Widget'] = soup.find('input',id='embed_code').get('value')
                     dict[ntitulo]['Publication Type'] =divs[4].find('p').text
                     '''Se imprime aviso de que se pudo con este proceso y se levanta la bandera de conseguido'''
-                    print('!!')
                     Consegido=True
                     
             else:
@@ -136,39 +136,60 @@ def ConseguirInformacion(titulo,areas,catalogos):
                 dict[ntitulo]['ISSN']=ISSN
 
     '''Si no se logro, se intenta con resurchify'''
+    Consegido=False
     if(Consegido==False):
         '''busca en la pagina'''
-        url=url_resurch+titulo
+        url=url_resurch+ntitulo
         soup = BeautifulSoup(scrap(url).content,"html.parser")
         '''si hay resultados'''
         if soup.find('p',class_='w3-medium'):
+            encontrado='#'
+            i=0
             '''se ven todos y se ve su radio de levenstein'''
             for n in soup.findAll('div','w3-white w3-container w3-card-4 w3-hover-light-gray'):
-                dist = Levenshtein.ratio(n.b.text[3:].replace('npj','').lower(),titulo.lower())   
+                i=+1
+                encontrado=n.b.text[3:].replace('npj','').lower()
+                dist = Levenshtein.ratio(encontrado,titulo.lower())   
                 '''si una esta lo suficientemente similar... se continua'''
                 if dist>.80:
                     '''se entra al hipervinculo y se consiguen sus atributos'''
                     url= n.find('a').get('href')
                     soup = BeautifulSoup(scrap(url).content,"html.parser")
                     main_content=soup.find('table',class_='w3-table w3-bordered w3-white w3-card-2 w3-hoverable d_table_font_size').findAll('tr')
-                    dict[ntitulo]['Subject Area and category'] = main_content[4].findAll('td')[1].text.split(';')
-                    dict[ntitulo]['Publisher']=main_content[9].findAll('td')[1].text
-                    dict[ntitulo]['H_Index'] =main_content[5].findAll('td')[1].text
-                    dict[ntitulo]['ISSN']=main_content[11].findAll('td')[1].text
+                    dict[ntitulo]['Subject Area and category'] = main_content[3].findAll('td')[1].text.split(';')
+                    dict[ntitulo]['Publisher']=main_content[8].findAll('td')[1].text
+                    dict[ntitulo]['H_Index'] =main_content[4].findAll('td')[1].text
+                    dict[ntitulo]['ISSN']=main_content[10].findAll('td')[1].text.split(', ')
                     dict[ntitulo]['Widget'] = None
-                    dict[ntitulo]['Publication Type'] = main_content[4].findAll('td')[1].text
+                    dict[ntitulo]['Publication Type'] = main_content[2].findAll('td')[1].text
                     '''imprime mensaje que se logro con este metodo, levanta bandera y rompe el ciclo para que no cheque los demas resultados'''
                     print('O!@')
                     Consegido=True
                     break
+            '''si no tomara que talvez era solo la parte del titulo completo... si es que se puede'''
+            if Consegido==False and (titulo.lower() in encontrado) and i==1:
+                url= n.find('a').get('href')
+                soup = BeautifulSoup(scrap(url).content,"html.parser")
+                main_content=soup.find('table',class_='w3-table w3-bordered w3-white w3-card-2 w3-hoverable d_table_font_size').findAll('tr')
+                dict[ntitulo]['Subject Area and category'] = main_content[3].findAll('td')[1].text.split(';')
+                dict[ntitulo]['Publisher']=main_content[8].findAll('td')[1].text
+                dict[ntitulo]['H_Index'] =main_content[4].findAll('td')[1].text
+                dict[ntitulo]['ISSN']=main_content[10].findAll('td')[1].text.split(', ')
+                dict[ntitulo]['Widget'] = None
+                dict[ntitulo]['Publication Type'] = main_content[2].findAll('td')[1].text
+                '''imprime mensaje que se logro con este metodo, levanta bandera y rompe el ciclo para que no cheque los demas resultados'''
+                print('O!@')
+                Consegido=True
     '''imprime mensaje dependiendo de si se encontro o no...'''
     if(Consegido):
         print('O ' + titulo +' Completado')
+        datos.update(dict)
     else:
         print('X ' + titulo +' No se pudo encontrar...')
+        datos.update(dict)
 
     '''guarda el nuevo diccionario en el super diccionario (datos)'''
-    datos.update(dict)
+    
 
 '''guarda en UTF 8'''    
 def guardarJSON(dict,nombre):
@@ -201,8 +222,9 @@ def extraccionParalelo(dic,datos,flag):
             informacion = {executor.submit(ConseguirInformacion, titulo,datos[titulo]['Area EPA'],datos[titulo]['Catalogos']) for titulo in datos.keys() if datos[titulo]['H_Index']==None}
             concurrent.futures.wait(informacion)
 
-def extraccionSecuencial():
+def extraccionSecuencial(dic,datos):
     for titulo in dic.keys():
+        datos={}
         ConseguirInformacion(titulo,dic[titulo]['areas'],dic[titulo]['catalogos'])
 
 if __name__ == '__main__':
@@ -211,9 +233,9 @@ if __name__ == '__main__':
     dic= cargarJSON('./datos/json/diccionario.json')
     datos = cargarJSON('./datos/json/datos.json')
     '''extrae'''
-    extraccionParalelo(dic,datos)
+    extraccionParalelo(dic,datos,True)
     '''ordena'''
     datos = dict(sorted(datos.items()))
     '''guarda'''
-    guardarJSON(datos,dictGuardado,False)
+    guardarJSON(datos,dictGuardado)
     print('Guardado JSON...')

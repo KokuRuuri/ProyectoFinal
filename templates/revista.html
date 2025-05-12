@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}{{ revista.titulo }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">{{ revista.titulo }}</h2>
+
+    <table class="table table-striped table-bordered">
+        <tbody>
+            <tr>
+                <th scope="row">Sitio web</th>
+                <td>
+                    {% if revista["Sitio web"] %}
+                        <a href="{{ revista['Sitio web'] }}" target="_blank">{{ revista['Sitio web'] }}</a>
+                    {% else %}
+                        No disponible
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">H-Index</th>
+                <td>{{ revista.H_Index or "N/A" }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Subject Area and Category</th>
+                <td>{{ revista["Subject Area and category"] or "No especificado" }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Áreas EPA</th>
+                <td>
+                    {% if revista["Area EPA"] %}
+                        {{ revista["Area EPA"] | join(', ') }}
+                    {% else %}
+                        No especificado
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Catálogos</th>
+                <td>
+                    {% if revista["Catalogos"] %}
+                        {{ revista["Catalogos"] | join(', ') }}
+                    {% else %}
+                        No especificado
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Publisher</th>
+                <td>{{ revista.Publisher or "No disponible" }}</td>
+            </tr>
+            <tr>
+                <th scope="row">ISSN</th>
+                <td>{{ revista.ISSN or "No disponible" }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Widget</th>
+                <td>{{ revista.Widget or "No disponible" }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Publication Type</th>
+                <td>{{ revista["Publication Type"] or "No disponible" }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('area') }}" class="btn btn-secondary mt-3">← Volver a Áreas</a>
+</div>
+{% endblock %}
