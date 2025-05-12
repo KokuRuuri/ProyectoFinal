@@ -12,7 +12,10 @@ class Revista:
         self.catalogos = info['Catalogos']
         self.enlace = info['Sitio web']
         if info['ISSN'] is not None:
-            self.issn = info['ISSN'].replace('-', '')
+            if isinstance(info['ISSN'], list):
+                self.issn = info['ISSN'][0].replace('-', '')
+            else:
+                self.issn = info['ISSN'].replace('-', '')
         else:
             self.issn = info['ISSN']
         self.editorial = info['Publisher']
