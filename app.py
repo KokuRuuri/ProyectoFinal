@@ -128,9 +128,9 @@ def busqueda():
 @app.route('/revista/<id>')
 def revista_detalle(id):
     # Buscar revista por titulo sin guiones (como ID)
-    revista = [rev for rev in revista_handler.obtener_todas_revistas() if rev == id]
+    revista = [rev for rev in revista_handler.obtener_todas_revistas() if rev.titulo == id]
     if len(revista)>0:
-        revista = revista_handler.obtener_revista(revista[0])
+        revista= revista[0]
         dia=datetime.date.today().day
         mes=datetime.date.today().month
         dia_anio=(mes*30)+dia

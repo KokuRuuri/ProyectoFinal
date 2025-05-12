@@ -3,7 +3,7 @@ import os
 
 class Revista:
     def __init__(self, titulo, info):
-        self.titulo = titulo
+        self.titulo = titulo.lower()
         try:
             self.hindex = int(info['H_Index'])
         except:
@@ -46,17 +46,17 @@ class RevistaCatalogo:
             data = json.load(f)
         for titulo in data.keys():
             revista = Revista(titulo, data[titulo])
-            self.revistas[titulo.lower()] = revista
+            self.revistas[titulo] = revista
 
     def obtener_revista(self, titulo):
         """Busca una revista por su título."""
-        return self.revistas.get(titulo.lower())
-
+        return self.revistas.get(titulo)
 
     def obtener_todas_revistas(self):
         """Devuelve todas las revistas disponibles."""
-        return [rev for rev in self.revistas]
-
+        return [rev for rev in self.revistas.values()]
+        
+    
     def obtener_areas(self):
         """Devuelve una lista de todas las áreas (sin duplicados)."""
         areas = set()
