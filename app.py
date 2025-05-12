@@ -11,7 +11,8 @@ def index():
         key=lambda r: r.hindex,
         reverse=True
     )
-    return render_template('index.html', revistas=revistas)
+    total = len(revistas)  # calcular total de revistas
+    return render_template('index.html', revistas=revistas, total=total)
 
 @app.route('/area')
 def area():
