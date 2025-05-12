@@ -147,18 +147,28 @@ def revista_detalle(id):
 def creditos():
     return render_template('creditos.html')
 
-@app.route('/login',methods =['GET','POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method =='POST':
+    error = None
+    if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if username in users.keys():
-            if hashlib.sha256(password.encode()).hexdigest()==users[username]["Password"]:
+        if username in users:
+            hashed_password = hashlib.sha256(password.encode()).hexdigest()
+            if hashed_password == users[username]['Password']:
                 session['logged_in'] = True
                 session['username'] = username
                 return redirect(url_for('index'))
-    return render_template('login.html')
- 
+            else:
+                error = 'Contraseña incorrecta'
+        else:
+            error = 'Usuario no encontrado'
+    return render_template('login.html', error=error)
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)
