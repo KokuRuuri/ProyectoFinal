@@ -82,6 +82,10 @@ def catalogo_detalle(nombre_catalogo):
         catalogos=catalogos
     )
 
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
 @app.route('/explorar')
 @app.route('/explorar/<letra>')
 def explorar(letra=None):
