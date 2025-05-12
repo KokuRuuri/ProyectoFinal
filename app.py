@@ -30,6 +30,31 @@ def area_detalle(nombre_area):
         area_actual=nombre_area
     )
 
+@app.route('/buscar_revistas')
+def buscar_revistas():
+    q = request.args.get('q', '').lower()
+    area = request.args.get('area')
+    catalogo = request.args.get('catalogo')
+    if area:
+        filtradas = revista_handler.revistas_por_area(area)
+    elif catalogo:
+        filtradas = revista_handler.revistas_por_catalogo(catalogo)
+    else:
+        filtradas = revista_handler.obtener_todas_revistas()
+
+    # Búsqueda por término
+    resultado = [
+        {
+            'id': r['issn'],
+            'titulo': r['titulo'],
+            'h_index': r['hindex']
+        }
+        for r in filtradas if q in r['titulo'].lower()
+    ]
+
+    return jsonify({'revistas': resultado})
+
+
 @app.route('/revistas/<area>', methods=['GET'])
 def obtener_revistas_por_area(area):
     revistas = revista_handler.revistas_por_area(area)

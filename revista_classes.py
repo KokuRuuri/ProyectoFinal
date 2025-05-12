@@ -65,6 +65,10 @@ class RevistaCatalogo:
             catalogos.update(revista.catalogos)
         return sorted(catalogos)
 
+    def obtener_revistas_por_area(self, area):
+        """Devuelve las revistas que pertenecen a un área específica."""
+        return [rev for rev in self.revistas if rev.area.lower() == area.lower()]
+        
     def revistas_por_area(self, area):
         """Devuelve las revistas que pertenecen a un área específica, ordenadas por H-Index."""
         area = area.lower()
