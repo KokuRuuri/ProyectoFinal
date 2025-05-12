@@ -20,6 +20,8 @@ class Revista:
             self.issn = info['ISSN']
         self.editorial = info['Publisher']
         self.widget = info['Widget']
+        self.mes =info['ultima_visita'][0]
+        self.dia =info['ultima_visita'][1]
         self.info = info
 
     def to_dict(self):

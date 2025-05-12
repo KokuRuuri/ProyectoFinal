@@ -3,8 +3,10 @@ from revista_classes import RevistaCatalogo
 from scripts import web_scrapper as wb
 import os
 import hashlib
- 
- 
+import datetime
+
+json_locacion = './datos/json/datos.json'
+json = wb.cargarJSONutf8(json_locacion)
 users = wb.cargarJSONutf8('./datos/json/users.json')
 app = Flask(__name__)
 revista_handler = RevistaCatalogo()
@@ -109,6 +111,14 @@ def busqueda():
 def revista_detalle(id):
     # Buscar revista por ISSN sin guiones (como ID)
     revista = next((rev for rev in revista_handler.obtener_todas_revistas() if rev.issn == id), None)
+    dia=datetime.date.today().day
+    mes=datetime.date.today().month
+    dia_anio=(mes*30)+dia
+    dia_anio_rev=(revista.mes*30)+revista.dia
+    if dia_anio-dia_anio_rev>30 or dia_anio-dia_anio_rev<-30 :
+        json.update(wb.ConseguirInformacion(revista.titulo,revista.areas,revista.catalogos))
+        wb.guardarJSON(json,json_locacion)
+        revista_handler = RevistaCatalogo()
     if revista:
         return render_template('revista_detalle.html', revista=revista)
     else:
