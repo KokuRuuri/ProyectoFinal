@@ -14,13 +14,22 @@
         <form method="post">
             <div class="mb-3"> <label for="usuario" class="form-label">Usuario</label>
                 <div class="input-group"> <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Ingresa tu usuario"
-                        required> </div>
+                    <input type="text" class="form-control" id="username" name="username"
+                        placeholder="Ingresa tu usuario" required>
+                </div>
             </div>
             <div class="mb-3"> <label for="password" class="form-label">Contraseña</label>
                 <div class="input-group"> <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
                     <input type="password" class="form-control" id="password" name="password"
-                        placeholder="Tu contraseña" required> </div>
+                        placeholder="Tu contraseña" required>
+                </div>
+                <br>
             </div> <button type="submit" class="btn btn-primary w-100">Acceder</button>
         </form>
-</div> {% endblock %}
+        {% if error %}
+        <div class="alert alert-danger mt-3" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+
+    </div> {% endblock %}

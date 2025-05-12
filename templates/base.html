@@ -1,51 +1,62 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <title>UniDocs - {% block title %}{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
-    <link rel="icon" href="{{ url_for('static', filename='./images/UniDocs_logo.ico') }}" type="image/x-icon">
+  <meta charset="UTF-8">
+  <title>UniDocs - {% block title %}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+  <link rel="icon" href="{{ url_for('static', filename='./images/UniDocs_logo.ico') }}" type="image/x-icon">
 </head>
+
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark navbar-primary py-3">
-  <div class="container-fluid">
-    <img src="{{ url_for('static', filename='imgs/UniDocs_logo.png') }}" alt="UniDocs" height="50">
-    <a class="navbar-brand fw-bold fs-4" href="{{ url_for('index') }}">
-      UniDocs
-    </a>
-    <div class="d-flex ms-auto align-items-center gap-3">
-      <a href="{{ url_for('login') }}" class="btn" style="background-color: #F7A11B; color: white;">Acceder</a>
-      <img src="{{ url_for('static', filename='imgs/logo_unison.png') }}" alt="Unison" height="50">
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-primary py-3">
+    <div class="container-fluid">
+      <img src="{{ url_for('static', filename='imgs/UniDocs_logo.png') }}" alt="UniDocs" height="50">
+      <a class="navbar-brand fw-bold fs-4" href="{{ url_for('index') }}">
+        UniDocs
+      </a>
+      <div class="d-flex ms-auto align-items-center gap-3">
+        {% if session.logged_in %}
+        <div class="d-flex align-items-center">
+          <span class="fw-bold fs-5 me-3 text-white">👋 ¡Hola, {{ session.username }}!</span>
+          <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">Cerrar Sesion</a>
+        </div>
+        {% else %}
+        <a href="{{ url_for('login') }}" class="btn" style="background-color: #F7A11B; color: white;">Acceder</a>
+        {% endif %}
+
+        <img src="{{ url_for('static', filename='imgs/logo_unison.png') }}" alt="Unison" height="50">
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
 
-<nav class="navbar navbar-expand-lg navbar-secondary">
-  <div class="mx-auto">
-    <ul class="navbar-nav d-flex justify-content-center mb-2 mb-lg-0">
-      <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Inicio</a></li>
-      <li class="nav-item"><a class="nav-link" href="{{ url_for('area') }}">Áreas</a></li>
-      <li class="nav-item"><a class="nav-link" href="{{ url_for('catalogos') }}">Catálogos</a></li>
-      <li class="nav-item"><a class="nav-link" href="{{ url_for('explorar') }}">Explorar</a></li>
-      <li class="nav-item"><a class="nav-link" href="{{ url_for('busqueda') }}">Búsqueda</a></li>
-      <li class="nav-item"><a class="nav-link" href="{{ url_for('creditos') }}">Créditos</a></li>
-    </ul>
-  </div>
-</nav>
+  <nav class="navbar navbar-expand-lg navbar-secondary">
+    <div class="mx-auto">
+      <ul class="navbar-nav d-flex justify-content-center mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('area') }}">Áreas</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('catalogos') }}">Catálogos</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('explorar') }}">Explorar</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('busqueda') }}">Búsqueda</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('creditos') }}">Créditos</a></li>
+      </ul>
+    </div>
+  </nav>
 
-<div class="container mt-4">
+  <div class="container mt-4">
     {% block content %}{% endblock %}
-</div>
+  </div>
 
-<footer class="text-center mt-5 mb-3">
+  <footer class="text-center mt-5 mb-3">
     <small>&copy; 2025 Universidad de Sonora – UniDocs</small>
-</footer>
+  </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
