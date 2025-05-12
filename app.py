@@ -127,16 +127,17 @@ def busqueda():
  
 @app.route('/revista/<id>')
 def revista_detalle(id):
-    # Buscar revista por ISSN sin guiones (como ID)
-    revista = next((rev for rev in revista_handler.obtener_todas_revistas() if rev.issn == id), None)
-    dia=datetime.date.today().day
-    mes=datetime.date.today().month
-    dia_anio=(mes*30)+dia
-    dia_anio_rev=(revista.mes*30)+revista.dia
-    if dia_anio-dia_anio_rev>30 or dia_anio-dia_anio_rev<-30 :
-        json.update(wb.ConseguirInformacion(revista.titulo,revista.areas,revista.catalogos))
-        wb.guardarJSON(json,json_locacion)
-        revista_handler = RevistaCatalogo()
+    # Buscar revista por titulo sin guiones (como ID)
+    revista = [rev for rev in revista_handler.obtener_todas_revistas() if rev == id]
+    if len(revista)>0:
+        revista = revista_handler.obtener_revista(revista[0])
+        dia=datetime.date.today().day
+        mes=datetime.date.today().month
+        dia_anio=(mes*30)+dia
+        dia_anio_rev=(revista.mes*30)+revista.dia
+        if dia_anio-dia_anio_rev>30 or dia_anio-dia_anio_rev<-30 :
+            json.update(wb.ConseguirInformacion(revista.titulo,revista.areas,revista.catalogos))
+            wb.guardarJSON(json,json_locacion)
     if revista:
         return render_template('revista_detalle.html', revista=revista)
     else:

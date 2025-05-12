@@ -52,9 +52,10 @@ class RevistaCatalogo:
         """Busca una revista por su título."""
         return self.revistas.get(titulo.lower())
 
+
     def obtener_todas_revistas(self):
         """Devuelve todas las revistas disponibles."""
-        return list(self.revistas.values())
+        return [rev for rev in self.revistas]
 
     def obtener_areas(self):
         """Devuelve una lista de todas las áreas (sin duplicados)."""

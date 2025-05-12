@@ -29,7 +29,7 @@
           <tbody>
             {% for revista in resultados %}
               <tr>
-                <td><a href="/revista/{{ revista.id }}">{{ revista.titulo }}</a></td>
+                <td><a href="/revista/{{ revista.titulo }}">{{ revista.titulo }}</a></td>
                 <td>
                   {% for cat in revista.catalogos %}
                     <a href="{{ url_for('catalogo_detalle', nombre_catalogo=cat) }}">{{ cat }}</a>{% if not loop.last %}, {% endif %}
