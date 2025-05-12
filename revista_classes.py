@@ -11,7 +11,7 @@ class Revista:
         self.areas = info['Area EPA']
         self.catalogos = info['Catalogos']
         self.enlace = info['Sitio web']
-        if info['ISSN'] is not None:
+        if info['ISSN'] != None:
             self.issn = info['ISSN'].replace('-', '')
         else:
             self.issn = info['ISSN']
