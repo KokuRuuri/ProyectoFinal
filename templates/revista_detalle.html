@@ -4,7 +4,17 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-3">{{ revista.titulo }}</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">{{ revista.titulo }}</h2>
+        {% if session.logged_in %}
+        <form action="{{ url_for('guardar_revista', id=revista.titulo) }}" method="POST" class="mb-0">
+            <button type="submit" class="btn btn-primary"
+                style="background-color: #E74C3C; border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                ⭐ Guardar revista
+            </button>
+        </form>
+        {% endif %}
+    </div>
 
     <table class="table table-striped table-bordered">
         <tbody>
@@ -12,59 +22,64 @@
                 <th scope="row" style="width: 30%;">Sitio web</th>
                 <td>
                     {% if revista.enlace %}
-                        <a href="{{ revista.enlace }}" target="_blank">{{ revista.enlace }}</a>
+                    <a href="{{ revista.enlace }}" target="_blank">{{ revista.enlace }}</a>
                     {% else %}
-                        No disponible
+                    No disponible
                     {% endif %}
                 </td>
             </tr>
             <tr>
-                <th scope="row" style="width: 30%;">H-Index</th>
+                <th scope="row">H-Index</th>
                 <td>{{ revista.hindex or "N/A" }}</td>
             </tr>
             <tr>
-                <th scope="row" style="width: 30%;">Subject Area and Category</th>
+                <th scope="row">Subject Area and Category</th>
                 <td>{{ revista.info["Subject Area and category"] or "No especificado" }}</td>
             </tr>
             <tr>
-                <th scope="row" style="width: 30%;">Áreas EPA</th>
+                <th scope="row">Áreas EPA</th>
                 <td>
                     {% if revista.areas %}
-                        {{ revista.areas | join(', ') }}
+                    {{ revista.areas | join(', ') }}
                     {% else %}
-                        No especificado
+                    No especificado
                     {% endif %}
                 </td>
             </tr>
             <tr>
-                <th scope="row" style="width: 30%;">Catálogos</th>
+                <th scope="row">Catálogos</th>
                 <td>
                     {% if revista.catalogos %}
-                        {{ revista.catalogos | join(', ') }}
+                    {{ revista.catalogos | join(', ') }}
                     {% else %}
-                        No especificado
+                    No especificado
                     {% endif %}
                 </td>
             </tr>
             <tr>
-                <th scope="row" style="width: 30%;">Publisher</th>
+                <th scope="row">Publisher</th>
                 <td>{{ revista.editorial or "No disponible" }}</td>
             </tr>
             <tr>
-                <th scope="row" style="width: 30%;">ISSN</th>
+                <th scope="row">ISSN</th>
                 <td>{{ revista.issn or "No disponible" }}</td>
             </tr>
             <tr>
-                <th scope="row" style="width: 30%;">Widget</th>
+                <th scope="row">Widget</th>
                 <td>{{ revista.widget or "No disponible" }}</td>
             </tr>
             <tr>
-                <th scope="row" style="width: 30%;">Publication Type</th>
+                <th scope="row">Publication Type</th>
                 <td>{{ revista.info["Publication Type"] or "No disponible" }}</td>
             </tr>
         </tbody>
     </table>
-    <br>
-    <a href="{{ url_for('index') }}" class="btn" style="background-color: #F7A11B; color: white; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">← Volver al Inicio</a>
+
+    <div class="mt-4">
+        <a href="{{ url_for('index') }}" class="btn"
+            style="background-color: #F7A11B; color: white; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+            ← Volver al Inicio
+        </a>
+    </div>
 </div>
 {% endblock %}

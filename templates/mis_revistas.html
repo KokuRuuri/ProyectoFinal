@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Mis Revistas{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <!-- Cambié el color de fondo del encabezado a un gris claro o tono neutro -->
+    <div class="card-header text-blue" style="background-color: #f4b400;">
+      <h4 class="mb-0">Revistas guardadas por {{ session.username }}</h4>
+    </div>
+    <div class="card-body">
+      {% if revistas %}
+        <div class="list-group">
+          {% for revista in revistas %}
+            <div class="list-group-item d-flex justify-content-between align-items-center border-bottom">
+              <div class="text-truncate" style="max-width: 70%;">
+                <h5 class="mb-1">{{ revista.titulo }}</h5>
+              </div>
+              <a href="{{ url_for('revista_detalle', id=revista.titulo) }}" class="btn btn-sm btn-outline-secondary">Ver más</a>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">No has guardado ninguna revista todavía.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

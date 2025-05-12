@@ -44,6 +44,11 @@
         <li class="nav-item"><a class="nav-link" href="{{ url_for('explorar') }}">Explorar</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('busqueda') }}">Búsqueda</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('creditos') }}">Créditos</a></li>
+        {% if session.logged_in %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('mis_revistas') }}">Mis Revistas</a>
+        </li>
+        {% endif %}
       </ul>
     </div>
   </nav>

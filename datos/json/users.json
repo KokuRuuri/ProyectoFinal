@@ -1,9 +1,16 @@
 {
-    "Miriam":{
-        "Password":"ead52e22931fa9abc8bb9073dba648e1b720af0795386e91366da8f8188d7752",
-      "Revistas":[]
+    "Miriam": {
+        "Password": "ead52e22931fa9abc8bb9073dba648e1b720af0795386e91366da8f8188d7752",
+        "Revistas": [
+            "10959203",
+            "00928674",
+            "circulation",
+            "archives of medical research",
+            "cell"
+        ]
     },
-    "Camila":{
-        "Password":"a9baf529fb363b918abc2832c7df4c41c55c0906f13d4b054eb205529806efa3",
-      "Revistas":[]}
+    "Camila": {
+        "Password": "a9baf529fb363b918abc2832c7df4c41c55c0906f13d4b054eb205529806efa3",
+        "Revistas": []
+    }
 }

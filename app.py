@@ -170,5 +170,30 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
+@app.route('/guardar/<id>', methods=['POST'])
+def guardar_revista(id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    
+    username = session['username']
+    if id not in users[username]["Revistas"]:
+        users[username]["Revistas"].append(id)
+        wb.guardarJSON(users, './datos/json/users.json')
+
+    return redirect(url_for('revista_detalle', id=id))
+
+@app.route('/mis_revistas')
+def mis_revistas():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    username = session['username']
+    revistas_guardadas = [
+        rev for rev in revista_handler.obtener_todas_revistas()
+        if rev.titulo in users[username]["Revistas"]
+    ]
+    return render_template('mis_revistas.html', revistas=revistas_guardadas)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
