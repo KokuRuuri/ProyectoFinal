@@ -189,7 +189,7 @@ def ConseguirInformacion(titulo,areas,catalogos):
         datos.update(dict)
 
     '''guarda el nuevo diccionario en el super diccionario (datos)'''
-    
+    return dict
 
 '''guarda en UTF 8'''    
 def guardarJSON(dict,nombre):
@@ -226,6 +226,15 @@ def extraccionSecuencial(dic,datos):
     for titulo in dic.keys():
         datos={}
         ConseguirInformacion(titulo,dic[titulo]['areas'],dic[titulo]['catalogos'])
+
+def cargarJSONutf8(archivo):
+    data={}
+    try:
+        with open(archivo,encoding='utf-8') as j:
+            data = json.load(j)
+    except:
+        print('no se encontro el archivo...')
+    return data
 
 if __name__ == '__main__':
     '''carga diccionarios'''

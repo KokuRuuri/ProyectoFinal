@@ -1,8 +1,14 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify,session,redirect,url_for
 from revista_classes import RevistaCatalogo
+from scripts import web_scrapper as wb
+import os
+import hashlib
 
+
+users = wb.cargarJSONutf8('./datos/json/users.json')
 app = Flask(__name__)
 revista_handler = RevistaCatalogo()
+app.secret_key = os.urandom(24)
 
 @app.route('/')
 def index():
@@ -111,6 +117,22 @@ def revista_detalle(id):
 @app.route('/creditos')
 def creditos():
     return render_template('creditos.html')
+
+@app.route('/login',methods =['GET','POST'])
+def login():
+    if request.method =='POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username in users.keys():
+            if hashlib.sha256(password.encode()).hexdigest()==users[username]["Password"]:
+                session['logged_in'] = True
+                session['username'] = username
+                return redirect(url_for('index'))
+            else:
+                error = 'Usuario o contraseña incorrectos'
+        else:
+            error = 'Usuario o contraseña incorrectos'
+    return render_template('login.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
