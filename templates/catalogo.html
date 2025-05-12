@@ -10,7 +10,8 @@
             <h4 class="text-center mb-4">Catálogos Disponibles</h4>
             <div class="list-group">
                 {% for catalogo in catalogos %}
-                <a href="/catalogos/{{ catalogo }}" class="list-group-item list-group-item-action catalogo-link" data-catalogo="{{ catalogo }}">
+                <a href="/catalogos/{{ catalogo }}" class="list-group-item list-group-item-action catalogo-link"
+                    data-catalogo="{{ catalogo }}">
                     {{ catalogo }}
                 </a>
                 {% endfor %}
@@ -20,7 +21,12 @@
         <!-- Tabla de revistas -->
         <div class="col-md-9">
             <h4 class="text-center mb-4">Revistas <span id="catalogo-title"></span></h4>
-            <input type="text" id="search-input" class="form-control mb-4" placeholder="Buscar revista..." />
+            <div class="input-group mb-4">
+                <input type="text" id="search-input" class="form-control" placeholder="Buscar revista...">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" id="search-button">Buscar</button>
+                </div>
+            </div>
 
             <div class="table-responsive">
                 <table class="table table-striped table-bordered" id="revistas-table">
@@ -42,54 +48,54 @@
 
 {% block scripts %}
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const catalogoLinks = document.querySelectorAll('.catalogo-link');
-    const revistasTable = document.querySelector('#revistas-table tbody');
-    const catalogoTitle = document.querySelector('#catalogo-title');
-    const searchInput = document.querySelector('#search-input');
+    document.addEventListener('DOMContentLoaded', function () {
+        const catalogoLinks = document.querySelectorAll('.catalogo-link');
+        const revistasTable = document.querySelector('#revistas-table tbody');
+        const catalogoTitle = document.querySelector('#catalogo-title');
+        const searchInput = document.querySelector('#search-input');
 
-    function loadRevistas(catalogo) {
-        revistasTable.innerHTML = '';
-        catalogoTitle.textContent = ' - ' + catalogo;
+        function loadRevistas(catalogo) {
+            revistasTable.innerHTML = '';
+            catalogoTitle.textContent = ' - ' + catalogo;
 
-        fetch(`/revistas/${catalogo}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.revistas.length > 0) {
-                    data.revistas.forEach(revista => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
+            fetch(`/revistas/${catalogo}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.revistas.length > 0) {
+                        data.revistas.forEach(revista => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
                             <td><a href="/revista/${revista.id}">${revista.titulo}</a></td>
                             <td class="text-center">${revista.h_index}</td>
                         `;
-                        revistasTable.appendChild(row);
-                    });
-                } else {
-                    revistasTable.innerHTML = '<tr><td colspan="2" class="text-center">No se encontraron revistas.</td></tr>';
-                }
-            })
-            .catch(error => {
-                console.error('Error al cargar revistas:', error);
-                revistasTable.innerHTML = '<tr><td colspan="2" class="text-center">Error al cargar las revistas.</td></tr>';
+                            revistasTable.appendChild(row);
+                        });
+                    } else {
+                        revistasTable.innerHTML = '<tr><td colspan="2" class="text-center">No se encontraron revistas.</td></tr>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cargar revistas:', error);
+                    revistasTable.innerHTML = '<tr><td colspan="2" class="text-center">Error al cargar las revistas.</td></tr>';
+                });
+        }
+
+        catalogoLinks.forEach(link => {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                const catalogo = this.dataset.catalogo;
+                loadRevistas(catalogo);
             });
-    }
+        });
 
-    catalogoLinks.forEach(link => {
-        link.addEventListener('click', function (event) {
-            event.preventDefault();
-            const catalogo = this.dataset.catalogo;
-            loadRevistas(catalogo);
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const rows = revistasTable.querySelectorAll('tr');
+            rows.forEach(row => {
+                const titulo = row.querySelector('td')?.textContent.toLowerCase() || '';
+                row.style.display = titulo.includes(searchTerm) ? '' : 'none';
+            });
         });
     });
-
-    searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value.toLowerCase();
-        const rows = revistasTable.querySelectorAll('tr');
-        rows.forEach(row => {
-            const titulo = row.querySelector('td')?.textContent.toLowerCase() || '';
-            row.style.display = titulo.includes(searchTerm) ? '' : 'none';
-        });
-    });
-});
 </script>
 {% endblock %}

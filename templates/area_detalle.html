@@ -10,7 +10,8 @@
             <h4 class="text-center mb-4">Áreas Disponibles</h4>
             <div class="list-group">
                 {% for area in areas %}
-                <a href="/area/{{ area }}" class="list-group-item list-group-item-action {% if area == area_actual %}active{% endif %}">
+                <a href="/area/{{ area }}"
+                    class="list-group-item list-group-item-action {% if area == area_actual %}active{% endif %}">
                     {{ area.replace('_', ' ') }}
                 </a>
                 {% endfor %}
@@ -19,8 +20,18 @@
 
         <!-- Tabla de revistas -->
         <div class="col-md-9">
-            <h4 class="text-center mb-4">Revistas en el área: {{ area_actual.replace('_', ' ') }}</h4>
-            <input type="text" id="search-input" class="form-control mb-4" placeholder="Buscar revista...">
+            <h4 class="text-center mb-4">
+                Revistas en el área: <span id="area-title" data-area="{{ area_actual }}">{{ area_actual.replace('_', '
+                    ') }}</span>
+            </h4>
+            <!-- Barra de búsqueda con botón -->
+            <div class="input-group mb-4">
+                <input type="text" id="search-input" class="form-control" placeholder="Buscar revista...">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" id="search-button">Buscar</button>
+                </div>
+            </div>
+
             <div class="table-responsive">
                 <table class="table table-striped table-bordered" id="revistas-table">
                     <thead class="thead-dark">
@@ -52,15 +63,38 @@
 {% block scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const searchButton = document.getElementById('search-button');
         const searchInput = document.getElementById('search-input');
-        const rows = document.querySelectorAll('#revistas-table tbody tr');
+        const revistasTable = document.querySelector('#revistas-table tbody');
+        const area = document.getElementById('area-title').dataset.area;
 
-        searchInput.addEventListener('input', () => {
-            const term = searchInput.value.toLowerCase();
-            rows.forEach(row => {
-                const titulo = row.querySelector('td')?.textContent.toLowerCase() || '';
-                row.style.display = titulo.includes(term) ? '' : 'none';
-            });
+        function renderRevistas(revistas) {
+            revistasTable.innerHTML = '';
+            if (revistas.length > 0) {
+                revistas.forEach(revista => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><a href="/revista/${revista.issn}">${revista.titulo}</a></td>
+                        <td class="text-center">${revista.hindex}</td>
+                    `;
+                    revistasTable.appendChild(row);
+                });
+            } else {
+                revistasTable.innerHTML = '<tr><td colspan="2" class="text-center">No se encontraron revistas.</td></tr>';
+            }
+        }
+
+        searchButton.addEventListener('click', () => {
+            const term = searchInput.value.trim().toLowerCase();
+            if (term.length > 0) {
+                fetch(`/buscar_revistas?q=${encodeURIComponent(term)}&area=${encodeURIComponent(area)}`)
+                    .then(response => response.json())
+                    .then(data => renderRevistas(data.revistas))
+                    .catch(err => {
+                        console.error(err);
+                        revistasTable.innerHTML = '<tr><td colspan="2" class="text-center">Error al buscar revistas.</td></tr>';
+                    });
+            }
         });
     });
 </script>
